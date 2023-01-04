@@ -2,7 +2,9 @@ const http = require("http");
 const fs = require("fs");
 
 const routesPage = {
-    "/": "index",
+    GET: {
+        "/": "index",
+    }
 };
 
 function returnHtml(pathFile) {
@@ -18,8 +20,9 @@ function returnHtml(pathFile) {
 }
 
 const server = http.createServer((request, response) => {
-    const route = request.url;
-    const pageFile = routesPage[route];
+    const { url: route, method } = request;
+
+    const pageFile = routesPage[method]?.[route];
 
     if (!pageFile) {
         response.writeHead(404, {
